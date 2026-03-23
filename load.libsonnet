@@ -20,7 +20,7 @@ local lib = {
         old { [key]: $.load(pkg[key]) }
       else old;
 
-    std.foldl(aux, std.objectFieldsAll(pkg), {}),
+    std.foldl(aux, if std.isFunction(pkg) then std.objectFieldsAll(pkg()) else std.objectFieldsAll(pkg), {}),
 };
 
 
