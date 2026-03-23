@@ -30,7 +30,7 @@ func main() {
 		file := args[0]
 
 		log.Println("Extracting from Jsonnet")
-		data, err := docsonnet.Extract(file, docsonnet.Opts{JPath: *jpath})
+		data, err := docsonnet.Extract(file, &docsonnet.Opts{JPath: *jpath})
 		if err != nil {
 			log.Fatalln("Extracting:", err)
 		}
