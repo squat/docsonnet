@@ -11,9 +11,10 @@ import (
 )
 
 type Opts struct {
-	ExtCode map[string]string
-	TLACode map[string]string
-	JPath   []string
+	ExtCode         map[string]string
+	TLACode         map[string]string
+	JPath           []string
+	NativeFunctions []*jsonnet.NativeFunction
 }
 
 // Load extracts and transforms the docsonnet data in `filename`, returning the
@@ -56,6 +57,9 @@ func Extract(filename string, opts *Opts) ([]byte, error) {
 	}
 	for k, v := range opts.TLACode {
 		vm.TLACode(k, v)
+	}
+	for _, f := range opts.NativeFunctions {
+		vm.NativeFunction(f)
 	}
 
 	// invoke load.libsonnet
