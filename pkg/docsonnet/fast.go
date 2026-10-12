@@ -141,14 +141,6 @@ func loadArgs(is []interface{}) []Argument {
 	return args
 }
 
-func fieldNames(msi map[string]interface{}) []string {
-	out := make([]string, 0, len(msi))
-	for k := range msi {
-		out = append(out, k)
-	}
-	return out
-}
-
 func loadObj(name string, msi map[string]interface{}, parent map[string]interface{}) Field {
 	obj := Object{
 		Name:   name,
@@ -156,11 +148,11 @@ func loadObj(name string, msi map[string]interface{}, parent map[string]interfac
 		Fields: make(Fields),
 	}
 
-	// look for children in same key
-	var iChilds interface{}
-	var ok bool
-	if iChilds, ok = parent[name]; !ok {
-		fmt.Println("aborting, no", name, strings.Join(fieldNames(parent), ", "))
+	// look for children in same key. load.libsonnet drops objects without
+	// any annotated children, so a missing key means the object is
+	// intentionally open-ended: return it without fields.
+	iChilds, ok := parent[name]
+	if !ok {
 		return Field{Object: &obj}
 	}
 
